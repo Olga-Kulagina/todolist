@@ -27,6 +27,7 @@ export type TaskType = {
     title: string
     todoListId: string
 }
+
 type TaskPropsType = {
     title: string
 }

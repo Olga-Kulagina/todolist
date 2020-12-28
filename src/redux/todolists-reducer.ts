@@ -1,8 +1,33 @@
-const initialState = {}
+import {TodolistType} from '../Todolist/Todolist';
+import {Dispatch} from 'redux';
+import {todolistsAPI} from '../api/todolosts-api';
 
-export const todolistsReducer = (state: any = initialState, action: any) => {
+export type SetTodolistsActionType = ReturnType<typeof setTodolists>
+
+type ActionType = SetTodolistsActionType
+
+const initialState: Array<TodolistType> = [
+    {title: 'a', addedDate: '', id: 'aaasss', order: 8}
+]
+
+export const todolistsReducer = (state: Array<TodolistType> = initialState, action: ActionType): Array<TodolistType>  => {
     switch (action.type) {
+        case 'SET_TODOLISTS': {
+            return action.todolists
+        }
         default:
             return state
+    }
+}
+
+export const setTodolists = (todolists: Array<TodolistType>) => ({type: 'SET_TODOLISTS', todolists} as const)
+
+export const fetchTodolists = () => {
+    return (dispatch: Dispatch) => {
+        todolistsAPI.getTodolists()
+            .then((res) => {
+                dispatch(setTodolists(res.data))
+                console.log(res.data)
+            })
     }
 }
