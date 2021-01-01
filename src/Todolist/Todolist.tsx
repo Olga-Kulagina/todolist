@@ -1,6 +1,8 @@
-import React from 'react';
-import {Task} from '../Task/Task';
+import React, {useEffect} from 'react';
+import {Task, TaskType} from '../Task/Task';
 import s from './Todolist.module.css'
+import {useDispatch} from 'react-redux';
+import {fetchTasks} from '../redux/tasks-reducer';
 
 export type TodolistType = {
     id: string
@@ -10,10 +12,20 @@ export type TodolistType = {
 }
 
 type TodolistPropsType = {
+    id: string
     title: string
+    tasks: Array<TaskType>
 }
 
+
+
 export const Todolist = React.memo((props: TodolistPropsType) => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(fetchTasks(props.id))
+    }, [dispatch, props.id])
+
     return (
         <div className={s.todolist}>
             <div>
@@ -23,9 +35,11 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                 EditableSpan
             </div>
             <div>
-                <Task title={'aaaaaa'} />
-                <Task title={'bbbbbbb'} />
-                <Task title={'vvvvvvv'} />
+                {
+                    props.tasks.map((t) => {
+                        return <Task key={t.id} title={t.title} taskId={t.id} todolistId={t.todoListId} />
+                    })
+                }
             </div>
             <div>
                 Filter

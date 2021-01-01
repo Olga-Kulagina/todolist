@@ -1,45 +1,35 @@
-import {Dispatch} from 'redux';
-import {tasksAPI} from '../api/todolosts-api';
-import {TaskType} from '../Task/Task';
-import {SetTodolistsActionType} from './todolists-reducer';
+import {deleteTask, tasksReducer, TasksStateType} from './tasks-reducer';
+import {TaskPriorities, TaskStatus} from '../Task/Task';
 
-export type SetTasksActionType = ReturnType<typeof setTasks>
+let startState: TasksStateType = {};
+beforeEach(() => {
+    startState = {
+        'todolistId1': [
+            {title: 'bread', todoListId: 'todolistId1', status: TaskStatus.New, startDate: '', priority: TaskPriorities.Hi,
+            order: -8, id: 'taskId1', description: '', deadline: '', addedDate: ''},
+            {title: 'milk', todoListId: 'todolistId1', status: TaskStatus.New, startDate: '', priority: TaskPriorities.Hi,
+                order: -9, id: 'taskId2', description: '', deadline: '', addedDate: ''},
+            {title: 'apple', todoListId: 'todolistId1', status: TaskStatus.New, startDate: '', priority: TaskPriorities.Low,
+                order: -10, id: 'taskId3', description: '', deadline: '', addedDate: ''}
+            ],
+        'todolistId2': [
+            {title: 'January', todoListId: 'todolistId2', status: TaskStatus.New, startDate: '', priority: TaskPriorities.Hi,
+                order: -18, id: 'taskId11', description: '', deadline: '', addedDate: ''},
+            {title: 'May', todoListId: 'todolistId2', status: TaskStatus.New, startDate: '', priority: TaskPriorities.Low,
+                order: -19, id: 'taskId21', description: '', deadline: '', addedDate: ''},
+            {title: 'August', todoListId: 'todolistId2', status: TaskStatus.New, startDate: '', priority: TaskPriorities.Low,
+                order: -110, id: 'taskId31', description: '', deadline: '', addedDate: ''}
+        ]
+    };
+});
 
-type ActionType = SetTodolistsActionType | SetTasksActionType
 
-export type TasksStateType = {
-    [key: string]: Array<TaskType>
-}
+test('task should be delete correct', () => {
+    const action = deleteTask('taskId21', 'todolistId2')
 
-const initialState: any = []
+    const endState = tasksReducer(startState, action)
 
-export const tasksReducer = (state: TasksStateType = initialState, action: ActionType): TasksStateType => {
-    switch (action.type) {
-        case 'SET_TODOLISTS': {
-            const stateCopy = {...state}
-            action.todolists.forEach((tl) => {
-                stateCopy[tl.id] = []
-            })
-            return stateCopy
-        }
-        case 'SET_TASKS': {
-            const stateCopy = {...state}
-            stateCopy[action.todolistId] = action.tasks
-            return stateCopy
-        }
-        default:
-            return state
-    }
-}
-
-export const setTasks = (tasks: any, todolistId: any) => ({type: 'SET_TASKS', tasks, todolistId} as const)
-
-export const fetchTasks = (todolistId: string) => {
-    return (dispatch: Dispatch) => {
-        tasksAPI.getTasks(todolistId)
-            .then((res) => {
-                dispatch(setTasks(res.data.items, todolistId))
-            })
-
-    }
-}
+    expect(endState['todolistId2'].length).toBe(2)
+    expect(endState['todolistId1'].length).toBe(3)
+    expect(endState['todolistId2'].every(t => t.id !== 'taskId21')).toBeTruthy()
+})

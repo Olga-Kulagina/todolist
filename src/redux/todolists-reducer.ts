@@ -6,9 +6,7 @@ export type SetTodolistsActionType = ReturnType<typeof setTodolists>
 
 type ActionType = SetTodolistsActionType
 
-const initialState: Array<TodolistType> = [
-    {title: 'a', addedDate: '', id: 'aaasss', order: 8}
-]
+const initialState: Array<TodolistType> = []
 
 export const todolistsReducer = (state: Array<TodolistType> = initialState, action: ActionType): Array<TodolistType>  => {
     switch (action.type) {
@@ -27,7 +25,6 @@ export const fetchTodolists = () => {
         todolistsAPI.getTodolists()
             .then((res) => {
                 dispatch(setTodolists(res.data))
-                console.log(res.data)
             })
     }
 }
