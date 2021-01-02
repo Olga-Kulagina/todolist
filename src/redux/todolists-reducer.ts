@@ -4,8 +4,9 @@ import {todolistsAPI} from '../api/todolosts-api';
 
 export type SetTodolistsActionType = ReturnType<typeof setTodolists>
 export type AddTodolistActionType = ReturnType<typeof addTodolist>
+export type RemoveTodolistActionType = ReturnType<typeof removeTodolist>
 
-type ActionType = SetTodolistsActionType | AddTodolistActionType
+type ActionType = SetTodolistsActionType | AddTodolistActionType | RemoveTodolistActionType
 
 const initialState: Array<TodolistType> = []
 
@@ -23,6 +24,9 @@ export const todolistsReducer = (state: Array<TodolistType> = initialState, acti
             }
             return [newTodolist, ...state]
         }
+        case 'REMOVE_TODOLIST': {
+            return state.filter(t => t.id !== action.todolistId)
+        }
         default:
             return state
     }
@@ -30,8 +34,9 @@ export const todolistsReducer = (state: Array<TodolistType> = initialState, acti
 
 export const setTodolists = (todolists: Array<TodolistType>) => ({type: 'SET_TODOLISTS', todolists} as const)
 export const addTodolist = (title: string, todolistId: string) => ({type: 'ADD_TODOLIST', title, todolistId} as const)
+export const removeTodolist = (todolistId: string) => ({type: 'REMOVE_TODOLIST', todolistId} as const)
 
-export const fetchTodolists = () => {
+export const fetchTodolistsTC = () => {
     return (dispatch: Dispatch) => {
         todolistsAPI.getTodolists()
             .then((res) => {
@@ -43,11 +48,22 @@ export const addTodolistTC = (title: string) => {
     return (dispatch: Dispatch) => {
         todolistsAPI.createTodolist(title)
             .then((res) => {
-                if(res.data.resultCode === 0) {
+                if (res.data.resultCode === 0) {
                     const newTodolistId = res.data.data.item.id
                     dispatch(addTodolist(title, newTodolistId))
                 }
 
             })
+    }
+}
+export const removeTodolistTC = (todolistId: string) => {
+    return (dispatch: Dispatch) => {
+        todolistsAPI.removeTodolist(todolistId)
+            .then((res) => {
+                if (res.data.resultCode === 0) {
+                    dispatch(removeTodolist(todolistId))
+                }
+        })
+
     }
 }

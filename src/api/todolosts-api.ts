@@ -18,6 +18,9 @@ export const todolistsAPI = {
     },
     createTodolist(title: string) {
         return instance.post(`todo-lists`, {title: title})
+    },
+    removeTodolist(todolistId: string) {
+        return instance.delete(`todo-lists/${todolistId}`)
     }
 }
 
@@ -27,5 +30,8 @@ export const tasksAPI = {
     },
     deleteTask(todolistId: string, taskId: string) {
         return instance.delete(`todo-lists/${todolistId}/tasks/${taskId}`)
+    },
+    addTask(todolistId: string, title: string) {
+        return instance.post(`todo-lists/${todolistId}/tasks`, {title})
     }
 }

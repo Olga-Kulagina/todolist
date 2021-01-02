@@ -2,10 +2,11 @@ import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import './App.css';
 import {Todolist, TodolistType} from './Todolist/Todolist';
-import {addTodolistTC, fetchTodolists} from './redux/todolists-reducer';
+import {addTodolistTC, fetchTodolistsTC, removeTodolistTC} from './redux/todolists-reducer';
 import {AppRootStateType} from './redux/redux-store';
-import {deleteTaskTC, TasksStateType} from './redux/tasks-reducer';
+import {addTaskTC, deleteTaskTC, TasksStateType} from './redux/tasks-reducer';
 import {AddItemForm} from './common/AddItemForm/AddItemForm';
+import {TaskType} from './Task/Task';
 
 const App = () => {
     const dispatch = useDispatch()
@@ -14,7 +15,7 @@ const App = () => {
     let tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
 
     useEffect(() => {
-        dispatch(fetchTodolists())
+        dispatch(fetchTodolistsTC())
     }, [dispatch])
 
     const deleteTask = useCallback((taskId: string, todolistId: string) => {
@@ -24,6 +25,15 @@ const App = () => {
     const addNewTodolist = useCallback((title: string) => {
         dispatch(addTodolistTC(title))
     }, [dispatch])
+
+    const addTask = useCallback((title: string, todolistId: string) => {
+        dispatch(addTaskTC(title, todolistId))
+    }, [dispatch])
+
+    const
+        removeTodolist = useCallback((todolistId: string) => {
+            dispatch(removeTodolistTC(todolistId))
+        }, [dispatch])
 
 
     return (
@@ -36,7 +46,8 @@ const App = () => {
 
                         return (
                             <Todolist key={tl.id} id={tl.id} title={tl.title} tasks={allTodolistTasks}
-                                      deleteTask={deleteTask}/>
+                                      deleteTask={deleteTask} removeTodolist={removeTodolist}
+                                      addTask={addTask}/>
                         )
                     })}
             </div>

@@ -1,4 +1,4 @@
-import {deleteTask, tasksReducer, TasksStateType} from './tasks-reducer';
+import {addTask, deleteTask, tasksReducer, TasksStateType} from './tasks-reducer';
 import {TaskPriorities, TaskStatus} from '../Task/Task';
 
 let startState: TasksStateType = {};
@@ -32,4 +32,27 @@ test('task should be delete correct', () => {
     expect(endState['todolistId2'].length).toBe(2)
     expect(endState['todolistId1'].length).toBe(3)
     expect(endState['todolistId2'].every(t => t.id !== 'taskId21')).toBeTruthy()
+})
+
+test('add new task should be correct', () => {
+    const action = addTask({
+        title: 'September',
+        todoListId: 'todolistId2',
+        status: TaskStatus.New,
+        startDate: '',
+        priority: TaskPriorities.Low,
+        order: -110,
+        id: 'taskId41',
+        description: '',
+        deadline: '',
+        addedDate: ''
+    })
+
+    const endState = tasksReducer(startState, action)
+
+    expect(endState["todolistId1"].length).toBe(3);
+    expect(endState["todolistId2"].length).toBe(4);
+    expect(endState["todolistId2"][0].id).toBeDefined();
+    expect(endState["todolistId2"][0].title).toBe("September");
+    expect(endState["todolistId2"][0].status).toBe(TaskStatus.New);
 })
