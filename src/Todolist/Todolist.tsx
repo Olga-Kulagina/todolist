@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Task, TaskType} from '../Task/Task';
 import s from './Todolist.module.css'
 import {useDispatch} from 'react-redux';
-import {fetchTasks} from '../redux/tasks-reducer';
+import {fetchTasksTC} from '../redux/tasks-reducer';
 
 export type TodolistType = {
     id: string
@@ -15,6 +15,7 @@ type TodolistPropsType = {
     id: string
     title: string
     tasks: Array<TaskType>
+    deleteTask: (taskId: string, todolistId: string) => void
 }
 
 
@@ -23,7 +24,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(fetchTasks(props.id))
+        dispatch(fetchTasksTC(props.id))
     }, [dispatch, props.id])
 
     return (
@@ -32,12 +33,13 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                 {props.title}
             </div>
             <div>
-                EditableSpan
+
             </div>
             <div>
                 {
                     props.tasks.map((t) => {
-                        return <Task key={t.id} title={t.title} taskId={t.id} todolistId={t.todoListId} />
+                        return <Task key={t.id} title={t.title} taskId={t.id} todolistId={t.todoListId}
+                        deleteTask={props.deleteTask}/>
                     })
                 }
             </div>

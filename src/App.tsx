@@ -1,12 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import './App.css';
-import {tasksAPI, todolistsAPI} from './api/todolosts-api';
-import {Task, TaskType} from './Task/Task';
 import {Todolist, TodolistType} from './Todolist/Todolist';
-import {fetchTodolists} from './redux/todolists-reducer';
+import {addTodolistTC, fetchTodolists} from './redux/todolists-reducer';
 import {AppRootStateType} from './redux/redux-store';
-import {TasksStateType} from './redux/tasks-reducer';
+import {deleteTaskTC, TasksStateType} from './redux/tasks-reducer';
+import {AddItemForm} from './common/AddItemForm/AddItemForm';
 
 const App = () => {
     const dispatch = useDispatch()
@@ -18,16 +17,26 @@ const App = () => {
         dispatch(fetchTodolists())
     }, [dispatch])
 
+    const deleteTask = useCallback((taskId: string, todolistId: string) => {
+        dispatch(deleteTaskTC(taskId, todolistId))
+    }, [dispatch])
+
+    const addNewTodolist = useCallback((title: string) => {
+        dispatch(addTodolistTC(title))
+    }, [dispatch])
+
 
     return (
         <div className="App">
             <div>
+                <AddItemForm callback={addNewTodolist}/>
                 {
                     todolists.map((tl) => {
                         let allTodolistTasks = tasks[tl.id]
 
                         return (
-                            <Todolist key={tl.id} id={tl.id} title={tl.title} tasks={allTodolistTasks}/>
+                            <Todolist key={tl.id} id={tl.id} title={tl.title} tasks={allTodolistTasks}
+                                      deleteTask={deleteTask}/>
                         )
                     })}
             </div>

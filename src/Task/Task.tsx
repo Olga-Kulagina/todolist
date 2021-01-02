@@ -1,6 +1,4 @@
 import React from 'react';
-import {deleteTask} from '../redux/tasks-reducer';
-import {useDispatch} from 'react-redux';
 
 export enum TaskStatus {
     New = 0,
@@ -34,14 +32,13 @@ type TaskPropsType = {
     title: string
     taskId: string
     todolistId: string
+    deleteTask: (taskId: string, todolistId: string) => void
 }
 
 export const Task = React.memo((props: TaskPropsType) => {
 
-    const dispatch = useDispatch()
-
     const onDeleteTaskClick = () => {
-        dispatch(deleteTask(props.taskId, props.todolistId))
+        props.deleteTask(props.taskId, props.todolistId)
     }
 
     return (

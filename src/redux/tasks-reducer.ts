@@ -1,12 +1,12 @@
 import {Dispatch} from 'redux';
 import {tasksAPI} from '../api/todolosts-api';
 import {TaskType} from '../Task/Task';
-import {SetTodolistsActionType} from './todolists-reducer';
+import {AddTodolistActionType, SetTodolistsActionType} from './todolists-reducer';
 
 export type SetTasksActionType = ReturnType<typeof setTasks>
 export type DeleteTaskActionType = ReturnType<typeof deleteTask>
 
-type ActionType = SetTodolistsActionType | SetTasksActionType | DeleteTaskActionType
+type ActionType = SetTodolistsActionType | SetTasksActionType | DeleteTaskActionType | AddTodolistActionType
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
@@ -31,9 +31,15 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
         case 'DELETE_TASK': {
             const stateCopy = {...state}
             const tasks = stateCopy[action.todolistId]
-            const newTasks = tasks.filter(t => t.id != action.taskId)
+            const newTasks = tasks.filter(t => t.id !== action.taskId)
             stateCopy[action.todolistId] = newTasks
             return stateCopy
+        }
+        case 'ADD_TODOLIST': {
+            return {
+                ...state,
+                [action.todolistId]: []
+            }
         }
         default:
             return state
@@ -44,12 +50,22 @@ export const setTasks = (tasks: any, todolistId: any) => ({type: 'SET_TASKS', ta
 
 export const deleteTask = (taskId: string, todolistId: string) => ({type: 'DELETE_TASK', taskId, todolistId} as const)
 
-export const fetchTasks = (todolistId: string) => {
+export const fetchTasksTC = (todolistId: string) => {
     return (dispatch: Dispatch) => {
         tasksAPI.getTasks(todolistId)
             .then((res) => {
-                dispatch(setTasks(res.data.items, todolistId))
+                const tasks = res.data.items
+                dispatch(setTasks(tasks, todolistId))
             })
 
+    }
+}
+
+export const deleteTaskTC = (taskId: string, todolistId: string) => {
+    return (dispatch: Dispatch) => {
+        tasksAPI.deleteTask(todolistId, taskId)
+            .then((res) => {
+                dispatch(deleteTask(taskId, todolistId))
+            })
     }
 }
