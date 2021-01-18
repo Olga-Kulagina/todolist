@@ -46,7 +46,7 @@ export const fetchTodolistsTC = () => {
 }
 export const addTodolistTC = (title: string) => {
     return (dispatch: Dispatch) => {
-        todolistsAPI.createTodolist(title)
+        todolistsAPI.addTodolist(title)
             .then((res) => {
                 if (res.data.resultCode === 0) {
                     const newTodolistId = res.data.data.item.id

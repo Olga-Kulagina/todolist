@@ -35,7 +35,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
             stateCopy[action.todolistId] = action.tasks
             return stateCopy
         }
-        case 'DELETE_TASK': {
+        case 'REMOVE_TASK': {
             const stateCopy = {...state}
             const tasks = stateCopy[action.todolistId]
             const newTasks = tasks.filter(t => t.id !== action.taskId)
@@ -63,7 +63,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
 
 export const setTasks = (tasks: any, todolistId: any) => ({type: 'SET_TASKS', tasks, todolistId} as const)
 
-export const deleteTask = (taskId: string, todolistId: string) => ({type: 'DELETE_TASK', taskId, todolistId} as const)
+export const deleteTask = (taskId: string, todolistId: string) => ({type: 'REMOVE_TASK', taskId, todolistId} as const)
 
 export const addTask = (task: TaskType) => ({type: 'ADD_TASK', task} as const)
 
@@ -80,7 +80,7 @@ export const fetchTasksTC = (todolistId: string) => {
 
 export const deleteTaskTC = (taskId: string, todolistId: string) => {
     return (dispatch: Dispatch) => {
-        tasksAPI.deleteTask(todolistId, taskId)
+        tasksAPI.removeTask(todolistId, taskId)
             .then((res) => {
                 dispatch(deleteTask(taskId, todolistId))
             })

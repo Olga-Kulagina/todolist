@@ -18,7 +18,7 @@ const App = () => {
         dispatch(fetchTodolistsTC())
     }, [dispatch])
 
-    const deleteTask = useCallback((taskId: string, todolistId: string) => {
+    const removeTask = useCallback((taskId: string, todolistId: string) => {
         dispatch(deleteTaskTC(taskId, todolistId))
     }, [dispatch])
 
@@ -46,7 +46,7 @@ const App = () => {
 
                         return (
                             <Todolist key={tl.id} id={tl.id} title={tl.title} tasks={allTodolistTasks}
-                                      deleteTask={deleteTask} removeTodolist={removeTodolist}
+                                      deleteTask={removeTask} removeTodolist={removeTodolist}
                                       addTask={addTask}/>
                         )
                     })}
