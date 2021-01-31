@@ -1,12 +1,13 @@
 import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import './App.css';
 import {Todolist, TodolistType} from './Todolist/Todolist';
 import {addTodolistTC, fetchTodolistsTC, removeTodolistTC} from './redux/todolists-reducer';
 import {AppRootStateType} from './redux/redux-store';
 import {addTaskTC, deleteTaskTC, TasksStateType} from './redux/tasks-reducer';
 import {AddItemForm} from './common/AddItemForm/AddItemForm';
-import {TaskType} from './Task/Task';
+import {Col, Layout, Row} from 'antd';
+import s from './App.module.css'
+
 
 const App = () => {
     const dispatch = useDispatch()
@@ -35,22 +36,43 @@ const App = () => {
             dispatch(removeTodolistTC(todolistId))
         }, [dispatch])
 
+    const {Header, Content, Footer} = Layout;
 
     return (
         <div className="App">
-            <div>
-                <AddItemForm callback={addNewTodolist}/>
-                {
-                    todolists.map((tl) => {
-                        let allTodolistTasks = tasks[tl.id]
 
-                        return (
-                            <Todolist key={tl.id} id={tl.id} title={tl.title} tasks={allTodolistTasks}
-                                      deleteTask={removeTask} removeTodolist={removeTodolist}
-                                      addTask={addTask}/>
-                        )
-                    })}
-            </div>
+            <Layout className="layout">
+                <Header>
+
+                </Header>
+                <Content style={{padding: '0 50px'}}>
+                    <div className="site-layout-content">
+                        <div>
+                            <div className={s.addNewTodo}>
+                                <AddItemForm callback={addNewTodolist}/>
+                            </div>
+                            <div className="site-card-wrapper">
+                                <Row justify='center' gutter={16}>
+                                    {
+                                        todolists.map((tl) => {
+                                            let allTodolistTasks = tasks[tl.id]
+
+                                            return (
+                                                <Col span={6}>
+                                                    <Todolist key={tl.id} id={tl.id} title={tl.title}
+                                                              tasks={allTodolistTasks}
+                                                              deleteTask={removeTask} removeTodolist={removeTodolist}
+                                                              addTask={addTask}/>
+                                                </Col>
+                                            )
+                                        })}
+                                </Row>
+                            </div>
+                        </div>
+                    </div>
+                </Content>
+                <Footer style={{textAlign: 'center'}}>Todolist</Footer>
+            </Layout>
 
 
         </div>

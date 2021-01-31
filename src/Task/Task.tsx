@@ -1,5 +1,7 @@
 import React from 'react';
-import {AddItemForm} from '../common/AddItemForm/AddItemForm';
+import s from './Task.module.css'
+import {Button, Checkbox} from 'antd';
+import {DeleteTwoTone} from '@ant-design/icons';
 
 export enum TaskStatus {
     New = 0,
@@ -43,15 +45,14 @@ export const Task = React.memo((props: TaskPropsType) => {
     }
 
     return (
-        <div>
+        <div className={s.task}>
             <span>
-                <input type='checkbox'/>
-            </span>
-            <span>
+                <Checkbox style={{margin: '0 10px 0 0'}}/>
                 {props.title}
             </span>
             <span>
-                <button onClick={onDeleteTaskClick}>X</button>
+                <Button onClick={onDeleteTaskClick} type='text' shape="circle" icon={<DeleteTwoTone/>}
+                         size='middle' />
             </span>
         </div>
     )

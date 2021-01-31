@@ -1,6 +1,7 @@
 import React, {ChangeEvent, MouseEvent, useState} from 'react';
 import {Button, Input} from 'antd';
 import s from './AddItemForm.module.css'
+import {PlusOutlined} from '@ant-design/icons';
 
 type AddItemFormPropsType = {
     callback: (newTitle: string) => void
@@ -19,9 +20,10 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
     }
 
     return (
-        <div>
+        <div className={s.addItemForm}>
             <Input type='text' onChange={onChangeHandler} style={{width: 200}}/>
-            <Button onClick={onClickHandler} type='primary'>+</Button>
+            <Button onClick={onClickHandler} type='primary' size='small' shape="circle"
+                    style={{margin: '0 5px'}} icon={<PlusOutlined />} />
         </div>
     )
 }

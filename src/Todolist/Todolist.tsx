@@ -4,6 +4,8 @@ import s from './Todolist.module.css'
 import {useDispatch} from 'react-redux';
 import {fetchTasksTC} from '../redux/tasks-reducer';
 import {AddItemForm} from '../common/AddItemForm/AddItemForm';
+import {DeleteTwoTone} from '@ant-design/icons';
+import {Button, Card} from 'antd';
 
 export type TodolistType = {
     id: string
@@ -22,7 +24,6 @@ type TodolistPropsType = {
 }
 
 
-
 export const Todolist = React.memo((props: TodolistPropsType) => {
     const dispatch = useDispatch()
 
@@ -34,30 +35,32 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
         props.removeTodolist(props.id)
     }
     const addTaskClick = (title: string) => {
-        props.addTask(title ,props.id)
+        props.addTask(title, props.id)
     }
+
 
     return (
         <div className={s.todolist}>
-            <AddItemForm callback={addTaskClick} />
-            <div>
-                {props.title}
-                <button onClick={onDeleteTodolistClick}>X</button>
-            </div>
-            <div>
 
-            </div>
-            <div>
-                {
-                    props.tasks.map((t) => {
-                        return <Task key={t.id} title={t.title} taskId={t.id} todolistId={t.todoListId}
-                        deleteTask={props.deleteTask}/>
-                    })
-                }
-            </div>
-            <div>
-                Filter
-            </div>
+            <Card title={props.title} bordered={false}
+                  extra={<Button onClick={onDeleteTodolistClick} type='text' shape="circle"
+                                 icon={<DeleteTwoTone/>} size='large'/>}
+                  style={{margin: '20px 0'}}
+            >
+                <AddItemForm callback={addTaskClick}/>
+                <div>
+                    {
+                        props.tasks.map((t) => {
+                            return <Task key={t.id} title={t.title} taskId={t.id} todolistId={t.todoListId}
+                                         deleteTask={props.deleteTask}/>
+                        })
+                    }
+                </div>
+                <div>
+                    Filter
+                </div>
+            </Card>
         </div>
+
     )
 })

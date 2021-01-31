@@ -1,9 +1,4 @@
-.input {
-    width: 500px;
-    padding: 20px;
-}
-
-.addItemForm {
+.task {
     display: flex;
     justify-content: space-between;
     align-items: center;
