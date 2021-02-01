@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Task, TaskType} from '../Task/Task';
+import {Task, TaskStatus, TaskType} from '../Task/Task';
 import s from './Todolist.module.css'
 import {useDispatch} from 'react-redux';
 import {fetchTasksTC} from '../redux/tasks-reducer';
@@ -19,6 +19,7 @@ type TodolistPropsType = {
     title: string
     tasks: Array<TaskType>
     deleteTask: (taskId: string, todolistId: string) => void
+    changeTaskStatus: (status: TaskStatus, todolistId: string, taskId: string) => void
     removeTodolist: (todolistId: string) => void
     addTask: (title: string, todolistId: string) => void
 }
@@ -52,12 +53,15 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                     {
                         props.tasks.map((t) => {
                             return <Task key={t.id} title={t.title} taskId={t.id} todolistId={t.todoListId}
-                                         deleteTask={props.deleteTask}/>
+                                         deleteTask={props.deleteTask} changeTaskStatus={props.changeTaskStatus}
+                                         status={t.status}/>
                         })
                     }
                 </div>
                 <div>
-                    Filter
+                    <Button>All</Button>
+                    <Button>Active</Button>
+                    <Button>Completed</Button>
                 </div>
             </Card>
         </div>

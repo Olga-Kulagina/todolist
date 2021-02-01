@@ -3,10 +3,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Todolist, TodolistType} from './Todolist/Todolist';
 import {addTodolistTC, fetchTodolistsTC, removeTodolistTC} from './redux/todolists-reducer';
 import {AppRootStateType} from './redux/redux-store';
-import {addTaskTC, deleteTaskTC, TasksStateType} from './redux/tasks-reducer';
+import {addTaskTC, changeTaskStatusTC, deleteTaskTC, TasksStateType} from './redux/tasks-reducer';
 import {AddItemForm} from './common/AddItemForm/AddItemForm';
 import {Col, Layout, Row} from 'antd';
 import s from './App.module.css'
+import {TaskStatus} from './Task/Task';
 
 
 const App = () => {
@@ -31,10 +32,13 @@ const App = () => {
         dispatch(addTaskTC(title, todolistId))
     }, [dispatch])
 
-    const
-        removeTodolist = useCallback((todolistId: string) => {
-            dispatch(removeTodolistTC(todolistId))
-        }, [dispatch])
+    const removeTodolist = useCallback((todolistId: string) => {
+        dispatch(removeTodolistTC(todolistId))
+    }, [dispatch])
+
+    const changeTaskStatus = useCallback((status: TaskStatus, todolistId: string, taskId: string) => {
+        dispatch(changeTaskStatusTC(status, todolistId, taskId))
+    }, [dispatch])
 
     const {Header, Content, Footer} = Layout;
 
@@ -62,7 +66,7 @@ const App = () => {
                                                     <Todolist key={tl.id} id={tl.id} title={tl.title}
                                                               tasks={allTodolistTasks}
                                                               deleteTask={removeTask} removeTodolist={removeTodolist}
-                                                              addTask={addTask}/>
+                                                              addTask={addTask} changeTaskStatus={changeTaskStatus}/>
                                                 </Col>
                                             )
                                         })}

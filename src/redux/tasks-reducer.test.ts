@@ -1,4 +1,4 @@
-import {addTask, deleteTask, tasksReducer, TasksStateType} from './tasks-reducer';
+import {addTask, changeTaskStatusAC, deleteTask, tasksReducer, TasksStateType} from './tasks-reducer';
 import {TaskPriorities, TaskStatus} from '../Task/Task';
 
 let startState: TasksStateType = {};
@@ -55,4 +55,12 @@ test('add new task should be correct', () => {
     expect(endState["todolistId2"][0].id).toBeDefined();
     expect(endState["todolistId2"][0].title).toBe("September");
     expect(endState["todolistId2"][0].status).toBe(TaskStatus.New);
+})
+
+test('change task status should be correct', () => {
+    const action = changeTaskStatusAC(TaskStatus.Completed, 'todolistId1', 'taskId1')
+
+    const endState = tasksReducer(startState, action)
+
+    expect(endState["todolistId1"][0].status).toBe(TaskStatus.Completed)
 })
