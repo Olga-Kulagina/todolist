@@ -40,6 +40,12 @@ export const tasksAPI = {
     }
 }
 
+export const authAPI = {
+    login(data: LoginParamsType) {
+        return instance.post<ResponseType<{ userId?: number }>>(`auth/login`, data)
+    }
+}
+
 export type ResponseType<D = {}> = {
     resultCode: number
     messages: Array<string>
@@ -60,4 +66,11 @@ export type UpdateTaskModelType = {
     priority: TaskPriorities
     startDate: string
     deadline: string
+}
+
+export type LoginParamsType = {
+    email: string
+    password: string
+    rememberMe: boolean
+    captcha?: string
 }
