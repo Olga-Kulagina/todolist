@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../redux/redux-store';
 import {Redirect} from 'react-router-dom';
 import {PATH} from '../App';
-import {setIsLoggegInTC} from '../redux/auth-reducer';
+import {setIsLoggedInTC} from '../redux/auth-reducer';
 
 export const Login = () => {
     const dispatch = useDispatch()
@@ -19,7 +19,7 @@ export const Login = () => {
             rememberMe: false
         },
         onSubmit: values => {
-            dispatch(setIsLoggegInTC(values))
+            dispatch(setIsLoggedInTC(values))
         },
     });
 

@@ -24,12 +24,24 @@ export const authReducer = (state: AuthStateType = initialState, action: ActionT
 export const setIsLoggedIn = (value: boolean) => ({type: 'SET_IS_LOGGED_IN', value} as const)
 
 
-export const setIsLoggegInTC = (data: LoginParamsType) => {
+export const setIsLoggedInTC = (data: LoginParamsType) => {
     return (dispatch: Dispatch) => {
         authAPI.login(data)
             .then((res) => {
                 if(res.data.resultCode === 0) {
                     dispatch(setIsLoggedIn(true))
+                }
+            })
+
+    }
+}
+
+export const setIsLoggedOutTC = () => {
+    return (dispatch: Dispatch) => {
+        authAPI.logout()
+            .then((res) => {
+                if(res.data.resultCode === 0) {
+                    dispatch(setIsLoggedIn(false))
                 }
             })
 
