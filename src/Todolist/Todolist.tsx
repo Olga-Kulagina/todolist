@@ -68,7 +68,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
             <Card title={props.title} bordered={false}
                   extra={<Button onClick={onDeleteTodolistClick} type='text' shape="circle"
                                  icon={<DeleteTwoTone/>} size='large'/>}
-                  style={{margin: '20px 0'}}
+                  style={{margin: '15px 0'}}
             >
                 <AddItemForm callback={addTaskClick}/>
                 <div>
@@ -80,7 +80,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                         })
                     }
                 </div>
-                <div>
+                <div className={s.filterButtons}>
                     <Button type={filter === 'all' ? 'primary' : 'default'} onClick={onAllFilter}>All</Button>
                     <Button type={filter === 'active' ? 'primary' : 'default'} onClick={onActiveFilter}>Active</Button>
                     <Button type={filter === 'completed' ? 'primary' : 'default'} onClick={onCompletedFilter}>Completed</Button>

@@ -1,4 +1,5 @@
 import React from 'react';
+import s from './Login.module.css'
 import {useFormik} from 'formik';
 import {Button, Checkbox, Col, Form, Input, Row} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
@@ -36,9 +37,9 @@ export const Login = () => {
     }
 
     return (
-        <div>
+        <div className={s.login}>
             <Row justify='center'>
-                <Col span={8} style={{backgroundColor: '#fff'}}>
+                <Col xs={18} sm={16} md={12} lg={10} xl={8} xxl={4} style={{backgroundColor: '#fff'}}>
                     <div style={{textAlign: 'center', padding: '10px 0 0 5px'}}>
                         <p>To log in get registered here</p>
                         <p>or use common test account credentials:</p>

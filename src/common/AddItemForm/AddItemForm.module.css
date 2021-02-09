@@ -1,10 +1,6 @@
-.input {
-    width: 500px;
-    padding: 20px;
-}
-
 .addItemForm {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 5px 0;
 }

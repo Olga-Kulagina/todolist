@@ -60,7 +60,7 @@ export const Todolists = () => {
                             let allTodolistTasks = tasks[tl.id]
 
                             return (
-                                <Col span={6}>
+                                <Col xs={22} sm={12} md={10} lg={8} xl={6} xxl={6}>
                                     <Todolist key={tl.id} id={tl.id} title={tl.title}
                                               tasks={allTodolistTasks}
                                               deleteTask={removeTask} removeTodolist={removeTodolist}
