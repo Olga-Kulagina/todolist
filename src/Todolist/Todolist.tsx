@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Task, TaskStatus, TaskType} from '../Task/Task';
 import s from './Todolist.module.css'
 import {useDispatch} from 'react-redux';
@@ -23,10 +23,13 @@ type TodolistPropsType = {
     removeTodolist: (todolistId: string) => void
     addTask: (title: string, todolistId: string) => void
 }
+export type FilterType = 'all' | 'completed' | 'active'
 
 
 export const Todolist = React.memo((props: TodolistPropsType) => {
     const dispatch = useDispatch()
+
+    const [filter, setFilter] = useState<FilterType>('all')
 
     useEffect(() => {
         dispatch(fetchTasksTC(props.id))
@@ -37,6 +40,25 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     }
     const addTaskClick = (title: string) => {
         props.addTask(title, props.id)
+    }
+
+    const onAllFilter = () => {
+        setFilter('all')
+    }
+    const onActiveFilter = () => {
+        setFilter('active')
+    }
+    const onCompletedFilter = () => {
+        setFilter('completed')
+    }
+
+    let filteredTasks = props.tasks
+
+    if (filter === 'active') {
+        filteredTasks = props.tasks.filter(t => t.status !== TaskStatus.Completed)
+    }
+    if (filter === 'completed') {
+        filteredTasks = props.tasks.filter(t => t.status === TaskStatus.Completed)
     }
 
 
@@ -51,7 +73,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                 <AddItemForm callback={addTaskClick}/>
                 <div>
                     {
-                        props.tasks.map((t) => {
+                        filteredTasks.map((t) => {
                             return <Task key={t.id} title={t.title} taskId={t.id} todolistId={t.todoListId}
                                          deleteTask={props.deleteTask} changeTaskStatus={props.changeTaskStatus}
                                          status={t.status}/>
@@ -59,9 +81,9 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                     }
                 </div>
                 <div>
-                    <Button>All</Button>
-                    <Button>Active</Button>
-                    <Button>Completed</Button>
+                    <Button type={filter === 'all' ? 'primary' : 'default'} onClick={onAllFilter}>All</Button>
+                    <Button type={filter === 'active' ? 'primary' : 'default'} onClick={onActiveFilter}>Active</Button>
+                    <Button type={filter === 'completed' ? 'primary' : 'default'} onClick={onCompletedFilter}>Completed</Button>
                 </div>
             </Card>
         </div>

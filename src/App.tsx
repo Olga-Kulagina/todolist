@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Button, Col, Layout, Row, Spin} from 'antd';
+import {Button, Col, Layout, Modal, Row, Spin} from 'antd';
 import {Todolists} from './Todolists/Todolists';
 import {Route, Switch} from 'react-router-dom';
 import {Login} from './Login/Login';
@@ -21,8 +21,18 @@ const App = () => {
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
     const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
 
-    const onLogoutClick = () => {
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const onLogoutClickModal = () => {
+        setIsModalVisible(true)
+    }
+
+    const logout = () => {
+        setIsModalVisible(false)
         dispatch(setIsLoggedOutTC())
+    }
+    const closeModal = () => {
+        setIsModalVisible(false)
     }
 
     useEffect(() => {
@@ -41,8 +51,11 @@ const App = () => {
         <Layout className="layout">
             <Header>
                 {isLoggedIn ?
-                    <Button onClick={onLogoutClick}>Log Out</Button> : ''
+                    <Button onClick={onLogoutClickModal}>Log Out</Button> : ''
                 }
+                <Modal title="Confirm log out" visible={isModalVisible} onOk={logout} onCancel={closeModal}>
+                    <p>Are you sure you want to log out?</p>
+                </Modal>
             </Header>
             <Content style={{padding: '0 50px'}}>
                 <Switch>
