@@ -49,7 +49,7 @@ const App = () => {
 
     return (
         <Layout className="layout">
-            <Header>
+            <Header style={{textAlign: 'right'}}>
                 {isLoggedIn ?
                     <Button onClick={onLogoutClickModal}>Log Out</Button> : ''
                 }
