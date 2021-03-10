@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Task, TaskStatus, TaskType} from '../Task/Task';
 import s from './Todolist.module.css'
 import {useDispatch} from 'react-redux';
@@ -6,6 +6,7 @@ import {fetchTasksTC} from '../redux/tasks-reducer';
 import {AddItemForm} from '../common/AddItemForm/AddItemForm';
 import {DeleteTwoTone} from '@ant-design/icons';
 import {Button, Card} from 'antd';
+import {EditableDiv} from '../common/EditableDiv/EditableDiv';
 
 export type TodolistType = {
     id: string
@@ -22,6 +23,8 @@ type TodolistPropsType = {
     changeTaskStatus: (status: TaskStatus, todolistId: string, taskId: string) => void
     removeTodolist: (todolistId: string) => void
     addTask: (title: string, todolistId: string) => void
+    changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
+    changeTodolistTitle: (id: string, newTitle: string) => void
 }
 export type FilterType = 'all' | 'completed' | 'active'
 
@@ -41,6 +44,10 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     const addTaskClick = (title: string) => {
         props.addTask(title, props.id)
     }
+
+    const changeTodolistTitle = useCallback((title: string) => {
+        props.changeTodolistTitle(props.id, title)
+    }, [props.id, props.changeTodolistTitle])
 
     const onAllFilter = () => {
         setFilter('all')
@@ -65,7 +72,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     return (
         <div className={s.todolist}>
 
-            <Card title={props.title} bordered={false}
+            <Card title={<EditableDiv value={props.title} onChange={changeTodolistTitle}/>} bordered={false}
                   extra={<Button onClick={onDeleteTodolistClick} type='text' shape="circle"
                                  icon={<DeleteTwoTone/>} size='large'/>}
                   style={{margin: '15px 0'}}
@@ -76,7 +83,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                         filteredTasks.map((t) => {
                             return <Task key={t.id} title={t.title} taskId={t.id} todolistId={t.todoListId}
                                          deleteTask={props.deleteTask} changeTaskStatus={props.changeTaskStatus}
-                                         status={t.status}/>
+                                         status={t.status} changeTaskTitle={props.changeTaskTitle}/>
                         })
                     }
                 </div>

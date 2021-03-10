@@ -1,16 +1,15 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import s from '../App.module.css';
 import {AddItemForm} from '../common/AddItemForm/AddItemForm';
-import {Col, Row} from 'antd';
+import {Col, Row, Spin} from 'antd';
 import {Todolist, TodolistType} from '../Todolist/Todolist';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../redux/redux-store';
-import {addTaskTC, changeTaskStatusTC, deleteTaskTC, TasksStateType} from '../redux/tasks-reducer';
-import {addTodolistTC, fetchTodolistsTC, removeTodolistTC} from '../redux/todolists-reducer';
+import {addTaskTC, changeTaskStatusTC, deleteTaskTC, TasksStateType, updateTaskTitleTC} from '../redux/tasks-reducer';
+import {addTodolistTC, fetchTodolistsTC, removeTodolistTC, updateTodolistTitleTC} from '../redux/todolists-reducer';
 import {TaskStatus} from '../Task/Task';
 import {PATH} from '../App';
 import {Redirect} from 'react-router-dom';
-
 
 
 export const Todolists = () => {
@@ -44,7 +43,16 @@ export const Todolists = () => {
         dispatch(changeTaskStatusTC(status, todolistId, taskId))
     }, [dispatch])
 
-    if(!isLoggedIn) {
+
+    const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
+        dispatch(updateTaskTitleTC(todolistId, id, newTitle))
+    }, [dispatch])
+
+    const changeTodolistTitle = useCallback(function (id: string, title: string) {
+        dispatch(updateTodolistTitleTC(id, title))
+    }, [dispatch])
+
+    if (!isLoggedIn) {
         return <Redirect to={PATH.LOGIN}/>
     }
 
@@ -53,6 +61,9 @@ export const Todolists = () => {
             <div className={s.addNewTodo}>
                 <AddItemForm callback={addNewTodolist}/>
             </div>
+            {/*<div style={{textAlign: 'center'}}>*/}
+            {/*    <Spin />*/}
+            {/*</div>*/}
             <div className="site-card-wrapper">
                 <Row justify='center' gutter={16}>
                     {
@@ -64,7 +75,9 @@ export const Todolists = () => {
                                     <Todolist key={tl.id} id={tl.id} title={tl.title}
                                               tasks={allTodolistTasks}
                                               deleteTask={removeTask} removeTodolist={removeTodolist}
-                                              addTask={addTask} changeTaskStatus={changeTaskStatus}/>
+                                              addTask={addTask} changeTaskStatus={changeTaskStatus}
+                                              changeTaskTitle={changeTaskTitle}
+                                              changeTodolistTitle={changeTodolistTitle}/>
                                 </Col>
                             )
                         })}

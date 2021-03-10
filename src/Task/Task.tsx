@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import s from './Task.module.css'
 import {Button, Checkbox} from 'antd';
 import {DeleteTwoTone} from '@ant-design/icons';
 import {CheckboxChangeEvent} from 'antd/lib/checkbox';
+import {EditableDiv} from '../common/EditableDiv/EditableDiv';
 
 export enum TaskStatus {
     New = 0,
@@ -39,6 +40,7 @@ type TaskPropsType = {
     deleteTask: (taskId: string, todolistId: string) => void
     changeTaskStatus: (status: TaskStatus, todolistId: string, taskId: string) => void
     status: TaskStatus
+    changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
 }
 
 
@@ -53,13 +55,17 @@ export const Task = React.memo((props: TaskPropsType) => {
         props.changeTaskStatus(newIsDoneValue ? TaskStatus.Completed : TaskStatus.New, props.todolistId, props.taskId)
     }
 
+    const onTitleChangeHandler = useCallback((newValue: string) => {
+        props.changeTaskTitle(props.taskId, newValue, props.todolistId)
+    }, [props.taskId, props.todolistId]);
+
     return (
         <div className={s.task}>
             <span>
                 <Checkbox style={{margin: '0 10px 0 0'}} checked={props.status === TaskStatus.Completed}
                           onChange={onCheckboxHandler}/>
-                {props.title}
             </span>
+            <EditableDiv value={props.title} onChange={onTitleChangeHandler}/>
             <span>
                 <Button onClick={onDeleteTaskClick} type='text' shape="circle" icon={<DeleteTwoTone/>}
                         size='middle'/>
